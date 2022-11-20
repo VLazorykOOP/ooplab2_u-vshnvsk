@@ -1,5 +1,17 @@
 #include <iostream>
 using namespace std;
+ бітах 0-2 знаходиться номер рядка символу (3 біти), 
+у бітах 3-5 позиція символу в рядку (3 біти),
+6 біт – біт парності перших двох полів (1 біт)
+у бітах 7-14 ASCII - код букви (8 біт),
+15 біт - біт парності попереднього поля (1 біт). 
+struct TextCode {
+        unsigned short num : 3;
+        unsigned short numSymb : 3;
+        unsigned short bitStr : 6;
+        unsigned short ASCII : 8;
+        unsigned short bitSymb : 15;
+    };
 
 void Shifruvanna(char S[64], unsigned short Rez[64])
 {
@@ -22,7 +34,7 @@ void Shifruvanna(char S[64], unsigned short Rez[64])
         t = c;
         num = counter;
         numB = k;
-        r |= num >> 3;      // 0-2
+        r |= num << 3;      // 0-2
         r |= numB << 3;     // 3-5
         //t = c;
 
