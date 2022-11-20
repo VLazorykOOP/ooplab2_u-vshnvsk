@@ -1,20 +1,16 @@
 #include <iostream>
 using namespace std;
- бітах 0-2 знаходиться номер рядка символу (3 біти), 
-у бітах 3-5 позиція символу в рядку (3 біти),
-6 біт – біт парності перших двох полів (1 біт)
-у бітах 7-14 ASCII - код букви (8 біт),
-15 біт - біт парності попереднього поля (1 біт). 
-struct TextCode {
-        unsigned short num : 3;
-        unsigned short numSymb : 3;
-        unsigned short bitStr : 6;
-        unsigned short ASCII : 8;
-        unsigned short bitSymb : 15;
-    };
 
 void Shifruvanna(char S[64], unsigned short Rez[64])
 {
+    struct TextCode {
+        unsigned short num : 3;
+        unsigned short numS : 3;
+        unsigned short bitStr : 6;
+        unsigned short ASCII : 8;
+        unsigned short bitS : 15;
+    };
+
     unsigned char c;
     unsigned short r, t, i, b, num, numB;
     short j;
@@ -22,6 +18,7 @@ void Shifruvanna(char S[64], unsigned short Rez[64])
     std::cin.get(S, 64);
     for (i = 0;i<64;i++) 
     {
+        TextCode p{};
         int k = 64, counter = 1;
         while ((k - 16) > 0)
         { 
@@ -34,9 +31,8 @@ void Shifruvanna(char S[64], unsigned short Rez[64])
         t = c;
         num = counter;
         numB = k;
-        r |= num << 3;      // 0-2
-        r |= numB << 3;     // 3-5
-        //t = c;
+        r |= num >> p.num;      // 0-2
+        r |= numB << p.numS;     // 3-5
 
         b = 0;
         for (j = 0; j < 2; j++)    // обчислення біта парності
@@ -47,10 +43,9 @@ void Shifruvanna(char S[64], unsigned short Rez[64])
             }
                 t <<= 1;
         }
-        r |= b << 6;
+        r |= b << p.bitStr;
 
-        r |= t << 8;       //ASCII 7-14 
-        //t = 1;
+        r |= t << p.ASCII;       //ASCII 7-14 
 
         for (j = 0; j < 16; j++) // обчислення біта парності
         {
@@ -60,7 +55,7 @@ void Shifruvanna(char S[64], unsigned short Rez[64])
             }
                 t <<= 1;
         }
-        r |= b << 15;   
+        r |= b << p.bitS;   
         Rez[i] = r;
     }
 }
